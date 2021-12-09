@@ -16,4 +16,14 @@ Parameters:
 
 Example:
 HTML5Packer.exe "<TargetPath>" <exportType> <FormatTypes> <PackSize> <TargetOutputFile> --topfolder --nooutput
-HTML5Packer.exe "C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\bin\Debug\pack" css * 0 c:\packed.css
+Pack to JS:
+HTML5Packer.exe "C:\pack" js * 0 c:\packed.js
+  
+Pack to Css
+HTML5Packer.exe "C:\pack" css * 0 c:\packed.css
+
+ SplitFiles by 512kb:
+  HTML5Packer.exe "C:\pack" js * 512000 c:\packed.js
+  
+ Include only png,gif :
+  HTML5Packer.exe "C:\pack" js png,gif 0 c:\packed.js
