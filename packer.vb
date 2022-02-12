@@ -36,15 +36,22 @@ Module packer
 
     Public Function GetMimeType(fileName As String) As String
         Dim mimeType As String = "application/unknown"
-        Dim ext As String = System.IO.Path.GetExtension(fileName).ToLower()
-        Dim regKey As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext)
+        Try
+            Dim ext As String = System.IO.Path.GetExtension(fileName).ToLower()
+            Dim regKey As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext)
 
-        If Not regKey Is Nothing And Not regKey.GetValue("Content Type") Is Nothing Then
+            If Not regKey Is Nothing And Not regKey.GetValue("Content Type") Is Nothing Then
 
-            mimeType = regKey.GetValue("Content Type").ToString()
+                mimeType = regKey.GetValue("Content Type").ToString()
 
-            Return mimeType
-        End If
+                Return mimeType
+            End If
+
+        Catch ex As Exception
+            writeConsole("GetMimeType ERROR (" & fileName & "): " & ex.ToString)
+
+        End Try
+
 
         Return mimeType
     End Function
@@ -153,15 +160,20 @@ Module packer
 
             tRec.path = fil
             tRec.type = GetMimeType(fil)
+
+
             tRec.data = b64encode(packFileBASE64(fil))
 
 
             tRec.key = packKey(tRec.fileName)
 
 
+            If tRec.type <> "application/unknown" Then
 
 
-            fileListData.Add(tRec)
+                fileListData.Add(tRec)
+            End If
+
             Dim tShot As String = Mid(tRec.data, 1, 30)
 
             writeConsole("Packing...(base64) " & tRec.path & " " & tRec.type & "  " & tShot)
@@ -182,7 +194,8 @@ Module packer
         If cacheKeys.Contains(fkey) = True Then
             For i = 0 To 1000
                 If cacheKeys.Contains(fkey & i) = False Then
-                    Return fkey
+                    Return fkey & i
+
                 End If
 
             Next i
@@ -202,11 +215,14 @@ Module packer
     Public Function safeKey(data As String) As String
         Dim allowedChars As String = "qwertyuiopasdfghjklzxcvbnm._-0123456789"
         Dim tChar As String = ""
-
+        data = Replace(data, "ı", "i")
+        data = Replace(data, "İ", "I")
         For i = 1 To Len(data)
             tChar = Mid(data, i, 1)
-            If InStr(1, allowedChars, tChar) < 1 Then
+            If InStr(1, allowedChars, UCase(tChar)) < 1 And InStr(1, allowedChars, LCase(tChar)) < 1 Then
                 data = Replace(data, tChar, "_")
+
+            Else
 
             End If
         Next
@@ -257,6 +273,7 @@ Module packer
         End If
         fileKeyName = Replace(fileKeyName, " ", "_")
 
+
         writeConsole("Assign key[" & fileKeyName & "] for file:" & filename)
 
 
@@ -290,14 +307,31 @@ Module packer
 
             End If
 
+
+
+        End If
+        If packMode = "cssvar" Then
+            If headerPacked = False Then
+                packOutput = ":root {" & Environment.NewLine
+
+                headerPacked = True
+            End If
+
+
         End If
 
         If packMode = "js" Then
 
             addData = "Assets['" & tFileRec.key & "'] ='data:" & tFileRec.type & ";base64," & tFileRec.data & "';" & Environment.NewLine
         Else
+            If packMode = "cssvar" Then
+                addData = "--" & Replace(tFileRec.key, ".", "_") & ": url(data:" & tFileRec.type & ";base64," & tFileRec.data & "); " & Environment.NewLine
 
-            addData = "." & Replace(tFileRec.key, ".", "_") & " { content: url(data:" & tFileRec.type & ";base64," & tFileRec.data & "); }" & Environment.NewLine
+
+            Else
+                addData = "." & Replace(tFileRec.key, ".", "_") & " { content: url(data:" & tFileRec.type & ";base64," & tFileRec.data & "); }" & Environment.NewLine
+            End If
+
 
 
 
@@ -364,6 +398,12 @@ Module packer
             End If
 
         Next
+
+        'closing css :root
+        If packMode = "cssvar" Then
+            packOutput = packOutput & "}"
+
+        End If
 
 
         writeConsole("Writing Outputs to files (" & outPutList.Count & " / " & packIndex & ") Total:" & packedTotalSize & " bytes")
@@ -453,6 +493,7 @@ Module packer
         writeConsole("HTML5 Resource Packer usage: HTML5PACK <directory> <targetformat(css or js)> <packtypes(.png,.gif)> <packsize(1024)> <outputFileName> --topfolder --nooutput")
 
 
+
         '0 = klasor
         '1 = pack tipi css,js
         If args.Length <= 0 Then
@@ -492,7 +533,7 @@ Module packer
 
                     End If
                     packMode = LCase(args(1))
-                    If packMode <> "js" And packMode <> "css" Then
+                    If packMode <> "js" And packMode <> "css" And packMode <> "cssvar" Then
                         packMode = "js"
 
                     End If

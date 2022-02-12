@@ -1,0 +1,9 @@
+C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\bin\Release\HTML5Packer.exe
+C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\bin\Release\HTML5Packer.pdb
+C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\bin\Release\HTML5Packer.xml
+C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\obj\Release\HTML5Packer.Resources.resources
+C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\obj\Release\HTML5Packer.vbproj.GenerateResource.cache
+C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\obj\Release\HTML5Packer.vbproj.CoreCompileInputs.cache
+C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\obj\Release\HTML5Packer.exe
+C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\obj\Release\HTML5Packer.xml
+C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\obj\Release\HTML5Packer.pdb
