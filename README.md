@@ -34,3 +34,22 @@ HTML5Packer.exe "C:\pack" css * 0 c:\packed.css
  Include only png,gif :
  
   HTML5Packer.exe "C:\pack" js png,gif 0 c:\packed.js
+  
+  
+  
+  Updates
+  ---------------
+ added cssvar mode
+ 
+  HTML5Packer.exe "assets" cssvar * 0 packed.css
+  
+  output will be:
+  :root {
+--avatar50x50_png: url(data:image/png;base64,iVBORw0KG..
+}
+
+you can use resource like:
+background-image: var(--avatar50x50_png);
+
+
+  
