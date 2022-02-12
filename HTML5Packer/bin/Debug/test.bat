@@ -1,0 +1,2 @@
+C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\bin\Debug\HTML5Packer.exe "C:\Users\Black7\source\repos\HTLML5Packer\.vs\HTML5Packer\HTML5Packer\bin\Debug\pack" cssvar * 0 c:\packed.css
+pause
